@@ -1,4 +1,2 @@
 # otel-app-group10
-ENPM818N - Final Project - OpenTelemetry Application Deployed in AWS EKS <br>
-
-Edit Variables.tf with your keypair name
+ENPM818N - Final Project - OpenTelemetry Application Deployed in AWS EKS
