@@ -98,7 +98,7 @@ resource "null_resource" "create_k8s_cluster" {
       "chmod +x /home/ec2-user/eks_cluster/setup_addons.sh",
       "/home/ec2-user/eks_cluster/setup_addons.sh",
       "chmod +x /home/ec2-user/helm/deploy_helm.sh",
-      "chmod +x /home/ec2-user/helm/upgrade_helm.sh",
+      "chmod +x /home/ec2-user/helm/upgrade_app.sh",
     ]
   }
 
