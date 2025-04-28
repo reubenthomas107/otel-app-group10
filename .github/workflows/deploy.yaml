@@ -20,11 +20,11 @@ jobs:
         run: |
           echo "Checking all the runtime prerequisites" 
           aws --version
-          terraform --version
         continue-on-error: false
 
   build:
     runs-on: ubuntu-latest
+    needs: check-prerequisites
     steps:
       - name: "Checkout"
         uses: actions/checkout@v2
@@ -41,8 +41,15 @@ jobs:
         with:
           terraform_version: 1.11.2
 
-      - name: "Test Commands"
+      - name: "Check Prerequisite Commands"
         run: |
-          aws --version
+          aws sts get-caller-identity
           terraform --version
+        continue-on-error: false
+
+      - name: "Initialize Terraform and Create Deployment Plan"
+        run: |
+          terraform init
+          terraform validate
+          terraform plan -out=otel.plan 
           
