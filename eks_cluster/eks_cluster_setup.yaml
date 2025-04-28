@@ -1,0 +1,31 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: otel-app-cluster
+  region: us-east-1
+
+# availabilityZones: ["us-east-1a", "us-east-1b"]
+
+managedNodeGroups:
+  - name: eks-otel-app-mng
+    instanceType: t2.large
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 4
+    # volumeSize: 20
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: aws-load-balancer-controller
+      namespace: kube-system
+    wellKnownPolicies:
+      awsLoadBalancerController: true
+
+cloudWatch:
+ clusterLogging:
+   enableTypes: ["*"]
+   logRetentionInDays: 1 #7
+
