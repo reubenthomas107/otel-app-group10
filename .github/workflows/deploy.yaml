@@ -123,5 +123,6 @@ jobs:
           username: ec2-user
           key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
           script: |
+            cd /home/ec2-user/helm
             /home/ec2-user/helm/deploy_helm.sh
             echo "Deployed Helm Chart Successfully"
