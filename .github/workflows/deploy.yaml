@@ -62,11 +62,8 @@ jobs:
       - name: "Save Terraform Outputs"
         id: outputs
         run: |
-          echo "k8s_mgmt_ip=$(terraform output -raw k8s_management_instance_public_ip)" >> "$GITHUB_ENV"
-          # MGMT_IP=$(terraform output -json | jq -r .k8s_management_instance_public_ip.value)
-          # echo "k8s_management_public_ip=$MGMT_IP" >> $GITHUB_ENV
+          echo "k8s_mgmt_ip=$(terraform output -raw k8s_management_instance_public_ip)" >> $GITHUB_ENV
 
-      
       - name: "Test Variables"
         run: |
-          echo "k8s_ec2_instance_ip is ${{ env.k8s_management_instance_public_ip }}"
+          echo "k8s_ec2_instance_ip is ${{ env.k8s_mgmt_ip }}"
