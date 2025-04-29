@@ -60,10 +60,10 @@ jobs:
         continue-on-error: false
 
       - name: "Save Terraform Outputs"
-        id: outputs
+        id: tf_outputs
         run: |
-          echo "k8s_mgmt_ip=$(terraform output -raw k8s_management_instance_public_ip | tr -d '\r')" >> $GITHUB_ENV
+          echo "k8s_mgmt_ip=$(terraform output -raw k8s_management_instance_public_ip | tr -d '\r')" >> $GITHUB_OUTPUT
 
       - name: "Test Variables"
         run: |
-          echo "k8s_ec2_instance_ip is ${{ env.k8s_mgmt_ip }}"
+          echo "k8s_ec2_instance_ip is ${{ steps.tf_outputs.outputs.k8s_mgmt_ip }}"
