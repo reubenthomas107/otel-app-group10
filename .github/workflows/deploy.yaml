@@ -63,6 +63,7 @@ jobs:
         id: tf_outputs
         run: |
           MGMT_IP=$(terraform output -raw k8s_management_instance_public_ip)
+          echo $MGMT_IP
           echo "k8s_mgmt_ip=$MGMT_IP" >> $GITHUB_OUTPUT
 
       - name: "Test Variables"
