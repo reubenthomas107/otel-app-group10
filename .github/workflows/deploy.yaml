@@ -97,6 +97,9 @@ jobs:
         run: | 
           echo "This step is for building and pushing container images to ECR Registry"
 
+      - name: "Test Variables"
+        run: |
+          echo "k8s_ec2_instance_ip is ${{ env.k8s_mgmt_ip }}"
 
   deploy_oteldemo_helm:
     runs-on: ubuntu-latest
