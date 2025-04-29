@@ -72,12 +72,14 @@ resource "time_sleep" "wait-instance-setup" {
 
 # Deploy K8s Cluster
 resource "null_resource" "create_k8s_cluster" {
-  
+  triggers = {
+    always_run = "${timestamp()}"
+  }
   connection {
     type        = "ssh"
     host        = aws_instance.my_k8s_mgmt_instance.public_ip
     user        = "ec2-user"
-    private_key = file("${var.ssh_keypair_path}")
+    private_key = var.ssh_private_key #file("${var.ssh_keypair_path}")
   }
 
   #Uploading the necessary files to the EC2 management instance
@@ -90,6 +92,11 @@ resource "null_resource" "create_k8s_cluster" {
     source      = "./helm"   # Local file
     destination = "/home/ec2-user" # Remote path
   }
+
+  provisioner "file" {
+    source      = "./k8s"   # Local file
+    destination = "/home/ec2-user" # Remote path
+  }
   
   provisioner "remote-exec" {
     inline = [
@@ -99,6 +106,7 @@ resource "null_resource" "create_k8s_cluster" {
       "/home/ec2-user/eks_cluster/setup_addons.sh",
       "chmod +x /home/ec2-user/helm/deploy_helm.sh",
       "chmod +x /home/ec2-user/helm/upgrade_app.sh",
+      "chmod +x /home/ec2-user/k8s/deploy_k8s_manifest.sh",
     ]
   }
 

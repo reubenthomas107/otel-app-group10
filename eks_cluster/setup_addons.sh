@@ -17,7 +17,14 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 --set serviceAccount.create=false \
 --set region=${CLUSTER_REGION} \
 --set vpcId=${CLUSTER_VPC} \
---set serviceAccount.name=aws-load-balancer-controller
+--set serviceAccount.name=aws-load-balancer-controller \
+2>&1 | tee addon_output.log
 
+if grep -q "cannot re-use a name that is still in use" addon_output.log; then
+    echo "ALB Helm chart already installed, continuing..."
+else
+    echo "Helm install failed with unexpected error"
+    exit 1
+fi
 
 # TODO: Install the AWS CloudWatch Container Insights

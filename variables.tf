@@ -3,6 +3,12 @@ variable "ssh_keypair" {
   default     = "final_keypair.pem"
 }
 
+variable "ssh_private_key" {
+  type = string
+  description = "Private Key for SSH access to K8s Management Instance"
+  sensitive = true
+}
+
 variable "ssh_keypair_path" {
   description = "Path to the EC2 Key Pair"
   default     = "../../final_keypair.pem"
