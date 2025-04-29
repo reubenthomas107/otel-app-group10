@@ -109,7 +109,7 @@ jobs:
 
   deploy_oteldemo_helm:
     runs-on: ubuntu-latest
-    needs: [build_eks_cluster, build_containers]
+    needs: [build_aws, build_eks_cluster]
     env:
       k8s_mgmt_ip: ${{ needs.build_aws.outputs.k8s_mgmt_ip }}
     steps:
