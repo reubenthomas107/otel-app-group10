@@ -28,7 +28,7 @@ jobs:
     # needs: check-prerequisites
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4.2.2
 
       - name: "Set up AWS CLI"
         uses: aws-actions/configure-aws-credentials@v4
@@ -68,3 +68,49 @@ jobs:
       - name: "Test Variables"
         run: |
           echo "k8s_ec2_instance_ip is ${{ env.k8s_mgmt_ip }}"
+
+  build_eks_cluster:
+    runs-on: ubuntu-latest
+    needs: build_aws
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.2.2
+
+      - name: "Deploy EKS Cluster and Setup Add-ons (Remote SSH)"
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.k8s_mgmt_ip }}
+          username: ec2-user
+          key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
+          script: |
+            /home/ec2-user/eks_cluster/setup_cluster.sh
+            /home/ec2-user/eks_cluster/setup_addons.sh
+
+  build_containers:
+    runs-on: ubuntu-latest
+    needs: build_aws
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.2.2
+
+      - name: "Build and Push Container Images to ECR Registry"
+        run: | 
+          echo "This step is for building and pushing container images to ECR Registry"
+
+
+  deploy_oteldemo_helm:
+    runs-on: ubuntu-latest
+    needs: [build_eks_cluster, build_containers]
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.2.2
+
+      - name: "Deploy Helm Chart for OpenTelemetry-Demo App (Remote SSH)"
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.k8s_mgmt_ip }}
+          username: ec2-user
+          key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
+          script: |
+            /home/ec2-user/helm/deploy_helm.sh
+            echo "Deployed Helm Chart Successfully"
