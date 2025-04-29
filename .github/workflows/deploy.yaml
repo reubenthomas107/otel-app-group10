@@ -69,7 +69,7 @@ jobs:
 
       - name: "Test Variables"
         run: |
-          echo "k8s_ec2_instance_ip is ${{ env.k8s_mgmt_ip }}"
+          echo "k8s_ec2_instance_ip is ${{ steps.tf_outputs.outputs.k8s_mgmt_ip }}"
 
   build_eks_cluster:
     runs-on: ubuntu-latest
