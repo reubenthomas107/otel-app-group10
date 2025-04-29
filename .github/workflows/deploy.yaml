@@ -60,8 +60,6 @@ jobs:
 
       - name: "Apply Terraform Plan"
         run: |
-          # echo "${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}" > ssh_key.pem
-          # chmod 600 ssh_key.pem
           terraform apply -var="ssh_private_key=${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}" -auto-approve otel.plan
         continue-on-error: false
 
