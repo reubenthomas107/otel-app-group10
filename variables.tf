@@ -5,7 +5,6 @@ variable "ssh_keypair" {
 
 variable "ssh_private_key" {
   description = "Private Key for SSH access to K8s Management Instance"
-  default = ""
   sensitive = true
 }
 
