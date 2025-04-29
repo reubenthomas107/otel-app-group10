@@ -37,5 +37,5 @@ echo "Details of the Ingress Controller:"
 kubectl get ingress -n $NAMESPACE
 
 # Display the status of all resources in the namespace
-echo "\n\n\nDisplaying the status of all resources in the $NAMESPACE namespace:"
+echo "Displaying the status of all resources in the $NAMESPACE namespace:"
 kubectl get all -n $NAMESPACE
