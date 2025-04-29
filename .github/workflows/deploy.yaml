@@ -146,5 +146,5 @@ jobs:
           key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
           script: |
             cd /home/ec2-user/k8s
-            /home/ec2-user/k8s/deploy_k8s_resources.sh
+            /home/ec2-user/k8s/deploy_k8s_manifest.sh
             echo "Deployed Kubernetes Resources Successfully"
