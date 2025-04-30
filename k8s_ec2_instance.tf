@@ -6,7 +6,7 @@ resource "aws_iam_instance_profile" "ec2_k8s_profile" {
 
 resource "aws_instance" "my_k8s_mgmt_instance" {
   ami                         = "ami-07a6f770277670015"
-  instance_type               = t2.medium #"t2.large"
+  instance_type               = "t2.medium" #"t2.large"
   key_name                    = "final_keypair"
   subnet_id                   = aws_subnet.public_subnet_1.id
   associate_public_ip_address = true
