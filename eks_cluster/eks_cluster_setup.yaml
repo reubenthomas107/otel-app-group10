@@ -13,6 +13,9 @@ managedNodeGroups:
     desiredCapacity: 2
     minSize: 2
     maxSize: 4
+    iam:
+      withAddonPolicies:
+        autoScaler: true
     # volumeSize: 20
 
 iam:

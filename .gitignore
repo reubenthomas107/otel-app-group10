@@ -7,3 +7,6 @@
 # Crash log files
 crash.log
 crash.*.log
+
+# Exclude all opentelemetry-helm-charts/charts/opentelemetry-collector/ directory
+opentelemetry-helm-charts/charts/opentelemetry-collector/*
