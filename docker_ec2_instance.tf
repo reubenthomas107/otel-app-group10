@@ -9,7 +9,7 @@ resource "aws_instance" "my_docker_instance" {
     Name = "ec2-otel-docker-instance"
   }
   # Security group to allow SSH access
-  security_groups = [aws_security_group.web_sg.id]
+  security_groups = [aws_security_group.docker_mgmt_sg.id]
   user_data = <<-EOF
         #!/bin/bash
         sudo yum update -y

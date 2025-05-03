@@ -7,6 +7,7 @@ variable "ssh_private_key" {
   type = string
   description = "Private Key for SSH access to K8s Management Instance"
   sensitive = true
+  default = ""
 }
 
 variable "ssh_keypair_path" {
