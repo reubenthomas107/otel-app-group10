@@ -1,0 +1,11 @@
+groups:
+  - name: test-alert
+    rules:
+      - alert: NodeDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Node is down"
+          description: "The node {{ $labels.instance }} is down."

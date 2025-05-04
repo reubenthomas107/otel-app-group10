@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: alertmanager-prometheus-kube-prometheus-alertmanager
+  namespace: monitoring
+  labels:
+    app: kube-prometheus-stack-alertmanager
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: prometheus
+type: Opaque
+stringData:
+  alertmanager.yaml: |
+    global:
+      smtp_smarthost: 'smtp.gmail.com:587'
+      smtp_from: 'nivedu99@gmail.com'
+      smtp_auth_username: 'nivedu99@gmail.com'
+      smtp_auth_password: 'fttzhghkrvqyjcwj'
+
+    route:
+      group_by: ['alertname']
+      receiver: email-notifications
+
+    receivers:
+    - name: email-notifications
+      email_configs:
+      - to: 'jvenkat1@umd.edu'
+        send_resolved: true
