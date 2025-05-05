@@ -10064,14 +10064,14 @@ metadata:
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/version: "11.5.2"
-  name: grafana-clusterrole
+  name: grafana-k8s-clusterrole
 rules: []
 ---
 # Source: opentelemetry-demo/charts/opentelemetry-collector/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: otel-collector
+  name: otel-k8s-collector
   labels:
     app.kubernetes.io/name: opentelemetry-collector
     app.kubernetes.io/instance: opentelemetry-demo
@@ -10098,7 +10098,7 @@ metadata:
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/version: v3.1.0
     app.kubernetes.io/part-of: prometheus
-  name: prometheus
+  name: prometheus-k8s
 rules:
   - apiGroups:
       - ""
@@ -10142,7 +10142,7 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: grafana-clusterrolebinding
+  name: grafana-k8s-clusterrolebinding
   labels:
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: opentelemetry-demo
@@ -10153,14 +10153,14 @@ subjects:
     namespace: otel-demo
 roleRef:
   kind: ClusterRole
-  name: grafana-clusterrole
+  name: grafana-k8s-clusterrole
   apiGroup: rbac.authorization.k8s.io
 ---
 # Source: opentelemetry-demo/charts/opentelemetry-collector/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: otel-collector
+  name: otel-k8s-collector
   labels:
     app.kubernetes.io/name: opentelemetry-collector
     app.kubernetes.io/instance: opentelemetry-demo
@@ -10169,7 +10169,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: otel-collector
+  name: otel-k8s-collector
 subjects:
 - kind: ServiceAccount
   name: otel-collector
@@ -10185,7 +10185,7 @@ metadata:
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/version: v3.1.0
     app.kubernetes.io/part-of: prometheus
-  name: prometheus
+  name: prometheus-k8s
 subjects:
   - kind: ServiceAccount
     name: prometheus
@@ -10193,7 +10193,7 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: prometheus
+  name: prometheus-k8s
 ---
 # Source: opentelemetry-demo/charts/grafana/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -10657,7 +10657,7 @@ metadata:
     app.kubernetes.io/version: "2.0.2"
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
-  type: LoadBalancer #ClusterIP
+  type: ClusterIP
   ports:
     - port: 8080
       name: tcp-service
@@ -11287,6 +11287,8 @@ spec:
             successThreshold: 1
           resources:
             limits:
+              memory: 500Mi #300Mi
+            requests:
               memory: 300Mi
           volumeMounts:
             - name: config-volume

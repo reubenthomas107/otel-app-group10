@@ -33,7 +33,7 @@ else
 fi
 
 
-# TODO: Install the AWS CloudWatch Container Insights
+#Install the AWS CloudWatch Container Insights
 eksctl create iamserviceaccount \
 --name cloudwatch-agent \
 --namespace amazon-cloudwatch \
@@ -60,5 +60,20 @@ elif [ $status -eq 0 ]; then
     echo "CloudWatch Container Insights installed successfully"
 else
     echo "Failed to install CloudWatch Container Insights"
+    exit 1
+fi
+
+
+# Install the Cluster Autoscaler
+kubectl apply -f cluster_autoscaler.yaml
+kubectl wait --for=condition=available --timeout=120s deployment/cluster-autoscaler -n kube-system
+
+status=$?
+set -e
+
+if [ $status -eq 0 ]; then
+    echo "Cluster Autoscaler installed successfully"
+else
+    echo "Failed to install Cluster Autoscaler"
     exit 1
 fi

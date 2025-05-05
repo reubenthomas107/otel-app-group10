@@ -15,7 +15,6 @@ helm repo update
 # Deploy the application using the Helm chart in a different namespace (helm-otel-demo)
 helm upgrade --install $NAMESPACE ../opentelemetry-helm-charts/charts/opentelemetry-demo --namespace $NAMESPACE --create-namespace --values values_file.yaml --wait --timeout 3m
 
-
 # helm upgrade --install $NAMESPACE open-telemetry/opentelemetry-demo --namespace $NAMESPACE --create-namespace --values values_file.yaml --wait --timeout 3m
 
 # Check if the deployment was successful
