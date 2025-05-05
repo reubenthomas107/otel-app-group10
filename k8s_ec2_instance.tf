@@ -79,7 +79,7 @@ resource "null_resource" "create_k8s_cluster" {
     type        = "ssh"
     host        = aws_instance.my_k8s_mgmt_instance.public_ip
     user        = "ec2-user"
-    private_key = var.ssh_private_key #file("${var.ssh_keypair_path}") 
+    private_key = var.ssh_private_key #file("${var.ssh_keypair_path}")
   }
 
   #Uploading the necessary files to the EC2 management instance
@@ -103,6 +103,11 @@ resource "null_resource" "create_k8s_cluster" {
     destination = "/home/ec2-user" # Remote path
   }
 
+  provisioner "file" {
+    source      = "./tests"   # Local file
+    destination = "/home/ec2-user" # Remote path
+  }
+
   provisioner "remote-exec" {
     inline = [
       "chmod +x /home/ec2-user/eks_cluster/setup_cluster.sh",
@@ -112,6 +117,7 @@ resource "null_resource" "create_k8s_cluster" {
       "chmod +x /home/ec2-user/helm/deploy_helm.sh",
       "chmod +x /home/ec2-user/helm/upgrade_app.sh",
       "chmod +x /home/ec2-user/k8s/deploy_k8s_manifest.sh",
+      "chmod +x /home/ec2-user/tests/test_deployment.sh",
     ]
   }
 
