@@ -9,7 +9,7 @@ metadata:
 
 managedNodeGroups:
   - name: eks-otel-app-mng
-    instanceType: t2.large
+    instanceType: t3.large
     desiredCapacity: 2
     minSize: 2
     maxSize: 4
