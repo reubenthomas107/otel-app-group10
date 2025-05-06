@@ -72,9 +72,9 @@ resource "time_sleep" "wait-instance-setup" {
 
 # Deploy K8s Cluster
 resource "null_resource" "create_k8s_cluster" {
-  triggers = {
-    always_run = "${timestamp()}"
-  }
+  # triggers = {
+  #   always_run = "${timestamp()}"
+  # }
   connection {
     type        = "ssh"
     host        = aws_instance.my_k8s_mgmt_instance.public_ip
