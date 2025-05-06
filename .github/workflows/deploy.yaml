@@ -136,9 +136,15 @@ jobs:
               echo "Error: Ingress ALB hostname is empty. Exiting."
               exit 1
             fi
-
             echo "$INGRESS_ALB_NAME"
 
+      - name: "Set the Ingress ALB Record into Route53"
+        run: |
+          echo "Setting the Ingress ALB Record into Route53"
+          export TF_VAR_otel_app_alb_name="otel-demo-frontend-alb"
+          terraform plan -out=otel.plan -var="ssh_private_key=${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}"
+          terraform apply -var="ssh_private_key=${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}" -auto-approve otel.plan
+        continue-on-error: false
 
   deploy_k8s_manifests:
     runs-on: ubuntu-latest
@@ -159,10 +165,6 @@ jobs:
             cd /home/ec2-user/k8s
             /home/ec2-user/k8s/deploy_k8s_manifest.sh
             echo "Deployed Kubernetes Resources Successfully"
-
-      - name: "Set the Ingress ALB to Apply Terraform"
-        run: |
-          export TF_VAR_otel_app_alb_name="otel-demo-frontend-alb"
 
     
   test_deployment:
