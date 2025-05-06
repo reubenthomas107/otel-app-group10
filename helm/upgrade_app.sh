@@ -10,8 +10,8 @@ if [[ "$1" == "upgrade" ]]; then
     # Simulating the upgrade process
     # Updating the replica count for the frontend-proxy
     helm upgrade --install $NAMESPACE ../opentelemetry-helm-charts/charts/opentelemetry-demo --namespace $NAMESPACE \
-    --set components.frontend-proxy.replicas=3 \
-    --set components.frontend.replicas=2 \
+    --set components.frontend-proxy.replicas=4 \
+    --set components.frontend.replicas=4 \
     --values values_file.yaml \
     --wait --timeout 3m
 else
@@ -43,7 +43,7 @@ if [ $STATUS -eq 0 ]; then
 else
     echo "Deployment test cases failed, rolling back to the previous stable Helm version...."
     # Rolling back to the previous stable version
-    #helm rollback $NAMESPACE $(helm history $NAMESPACE -n $NAMESPACE --output json | jq '.[-2].revision') -n $NAMESPACE
-    helm rollback $NAMESPACE 1 -n $NAMESPACE
+    helm rollback $NAMESPACE $(helm history $NAMESPACE -n $NAMESPACE --output json | jq '.[-2].revision') -n $NAMESPACE
+    #helm rollback $NAMESPACE 1 -n $NAMESPACE
     echo "Rolled back to the previous stable version."
 fi

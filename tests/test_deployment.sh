@@ -104,6 +104,13 @@ fi
 # Testing the LoadGenerator Endpoint
 echo -e "\nTesting LoadGenerator endpoint..."
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$FRONTEND_URL/loadgen/")
+if [[ "$STATUS" -ne 200 ]]; then
+  echo "LoadGenerator endpoint request failed with HTTP status: $STATUS"
+  exit 1
+else
+  echo "LoadGenerator endpoint is reachable with status: $STATUS"
+fi
+
 
 # Testing the Jaeger Endpoint
 echo -e "\nTesting Jaeger endpoint..."
