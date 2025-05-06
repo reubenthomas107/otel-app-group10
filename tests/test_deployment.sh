@@ -10,6 +10,11 @@ UNHEALTHY_PODS=()
 
 # Iterate through all pods and inspect container statuses
 for pod in $(kubectl get pods -n "$NAMESPACE" -o jsonpath='{.items[*].metadata.name}'); do
+  if ! kubectl get pod "$pod" -n "$NAMESPACE" &>/dev/null; then
+    echo "Pod '$pod' no longer exists. Skipping..."
+    continue
+  fi
+  
   bad_state=$(kubectl get pod "$pod" -n "$NAMESPACE" -o json | jq -r '
     .status.containerStatuses[]? | select(
       .state.waiting.reason == "CrashLoopBackOff" or
