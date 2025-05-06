@@ -135,14 +135,14 @@ jobs:
             cat /tmp/ingress_alb_name.txt
 
       - name: "Fetch Ingress ALB Name"
-        uses: appleboy/scp-action@v0.1.0
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ env.k8s_mgmt_ip }}
           username: ec2-user
           key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
           source: /tmp/ingress_alb_name.txt
           target: ./ingress_alb_name.txt
-
+          strip_components: false
 
       - name: "ALB Name: Output"
         id: alb_variable
