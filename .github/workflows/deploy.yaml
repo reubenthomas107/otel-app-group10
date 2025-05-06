@@ -148,6 +148,7 @@ jobs:
         run: |
           echo "Setting the Ingress ALB Record into Route53"
           export TF_VAR_otel_app_alb_name="otel-demo-frontend-alb"
+          terraform init
           terraform plan -out=otel.plan -var="ssh_private_key=${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}"
           terraform apply -var="ssh_private_key=${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}" -auto-approve otel.plan
         continue-on-error: false
