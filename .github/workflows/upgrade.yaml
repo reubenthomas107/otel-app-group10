@@ -1,4 +1,4 @@
-Name: Simulate Upgrades or Failures in Helm - OpenTelemetry Demo App
+name: Simulate Upgrades or Failures in Helm - OpenTelemetry Demo App
 
 on:
   workflow_dispatch:
