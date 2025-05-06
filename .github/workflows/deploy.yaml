@@ -131,25 +131,13 @@ jobs:
             
             echo "Exporting the Ingress ALB Name"
             INGRESS_ALB_NAME=$(kubectl get ingress -n helm-otel-demo -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}' | cut -d '-' -f 1-4)
-            echo "$INGRESS_ALB_NAME" > /home/ec2-user/ingress_alb_name.txt
-            cat /home/ec2-user/ingress_alb_name.txt
+            
+            if [ -z "$INGRESS_ALB_NAME" ]; then
+              echo "Error: Ingress ALB hostname is empty. Exiting."
+              exit 1
+            fi
 
-      - name: "Fetch Ingress ALB Name"
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ env.k8s_mgmt_ip }}
-          username: ec2-user
-          key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
-          source: /home/ec2-user/ingress_alb_name.txt
-          target: ./ingress_alb_name.txt
-          strip_components: false
-
-      - name: "ALB Name: Output"
-        id: alb_variable
-        run: |
-          INGRESS_ALB_NAME=$(cat ./ingress_alb_name.txt)
-          echo "INGRESS_ALB_NAME=$INGRESS_ALB_NAME" >> $GITHUB_OUTPUT
-          echo "ALB NAME: ${{ steps.alb_variable.outputs.INGRESS_ALB_NAME }}"
+            echo "$INGRESS_ALB_NAME"
 
 
   deploy_k8s_manifests:
@@ -171,6 +159,10 @@ jobs:
             cd /home/ec2-user/k8s
             /home/ec2-user/k8s/deploy_k8s_manifest.sh
             echo "Deployed Kubernetes Resources Successfully"
+
+      - name: "Set the Ingress ALB to Apply Terraform"
+        run: |
+          export TF_VAR_otel_app_alb_name="otel-demo-frontend-alb"
 
     
   test_deployment:
