@@ -9,6 +9,7 @@ if [[ "$1" == "upgrade" ]]; then
     echo "Running upgrade..."
     # Simulating the upgrade process
     # Updating the replica count for the frontend-proxy
+
     helm upgrade --install $NAMESPACE ../opentelemetry-helm-charts/charts/opentelemetry-demo --namespace $NAMESPACE \
     --set components.frontend-proxy.replicas=4 \
     --set components.frontend.replicas=4 \
