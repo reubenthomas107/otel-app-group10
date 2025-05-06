@@ -153,6 +153,7 @@ jobs:
 
       - name: "Set the Ingress ALB Record into Route53"
         run: |
+          cp post_app_deploy/*.tf .
           echo "Setting the Ingress ALB Record into Route53"
           export TF_VAR_otel_app_alb_name="otel-demo-frontend-alb"
           terraform init
