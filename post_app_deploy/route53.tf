@@ -22,7 +22,7 @@ data "aws_route53_zone" "otel_demo_hosted_zone" {
 #   }
 # }
 
-data "aws_load_balancer" "otelapp_alb" {
+data "aws_lb" "otelapp_alb" {
   name = "otel-demo-frontend-alb"
 }
 
