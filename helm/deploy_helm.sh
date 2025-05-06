@@ -4,12 +4,18 @@ NAMESPACE="helm-otel-demo"
 
 # Add the OpenTelemetry-Demo Helm chart repository
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+helm repo add jaeger https://jaegertracing.github.io/helm-charts
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo add opensearch https://opensearch-project.github.io/helm-charts
 
 # Update the Helm repository to the latest version
 helm repo update
 
 # Deploy the application using the Helm chart in a different namespace (helm-otel-demo)
-helm upgrade --install $NAMESPACE open-telemetry/opentelemetry-demo --namespace $NAMESPACE --create-namespace --values values_file.yaml --wait --timeout 3m
+helm upgrade --install $NAMESPACE ../opentelemetry-helm-charts/charts/opentelemetry-demo --namespace $NAMESPACE --create-namespace --values values_file.yaml --wait --timeout 3m
+
+# helm upgrade --install $NAMESPACE open-telemetry/opentelemetry-demo --namespace $NAMESPACE --create-namespace --values values_file.yaml --wait --timeout 3m
 
 # Check if the deployment was successful
 # if [ $? -eq 0 ]; then

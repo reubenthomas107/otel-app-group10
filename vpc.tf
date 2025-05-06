@@ -47,9 +47,9 @@ resource "aws_route_table_association" "public_1" {
   route_table_id = aws_route_table.public_rt.id
 }
 
-resource "aws_security_group" "web_sg" {
+resource "aws_security_group" "docker_mgmt_sg" {
   vpc_id = aws_vpc.main.id
-  name = "instance-mgmt-sg"
+  name = "docker-instance-mgmt-sg"
   ingress {
     from_port   = 8080
     to_port     = 8080
@@ -72,6 +72,30 @@ resource "aws_security_group" "web_sg" {
   }
 
   tags = {
-    Name = "instance-mgmt-ec2-sg"
+    Name = "docker-instance-mgmt-ec2-sg"
+  }
+}
+
+
+resource "aws_security_group" "k8s_mgmt_sg" {
+  vpc_id = aws_vpc.main.id
+  name = "k8s-mgmt-instance-sg"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] 
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "k8s-mgmt-instance-sg"
   }
 }

@@ -6,7 +6,7 @@ resource "aws_iam_instance_profile" "ec2_k8s_profile" {
 
 resource "aws_instance" "my_k8s_mgmt_instance" {
   ami                         = "ami-07a6f770277670015"
-  instance_type               = "t2.large"
+  instance_type               = "t3.medium"
   key_name                    = "final_keypair"
   subnet_id                   = aws_subnet.public_subnet_1.id
   associate_public_ip_address = true
@@ -15,7 +15,7 @@ resource "aws_instance" "my_k8s_mgmt_instance" {
     Name = "k8s-management-ec2-instance-otel"
   }
   # Security group to allow SSH access
-  security_groups = [aws_security_group.web_sg.id]
+  security_groups = [aws_security_group.k8s_mgmt_sg.id]
   user_data = <<-EOF
         #!/bin/bash
         sudo yum update -y
@@ -66,7 +66,7 @@ resource "aws_instance" "my_k8s_mgmt_instance" {
 }
 
 resource "time_sleep" "wait-instance-setup" {
-  create_duration = "100s"
+  create_duration = "200s"
   depends_on      = [aws_instance.my_k8s_mgmt_instance]
 }
 
@@ -98,6 +98,16 @@ resource "null_resource" "create_k8s_cluster" {
     destination = "/home/ec2-user" # Remote path
   }
   
+  provisioner "file" {
+    source      = "./opentelemetry-helm-charts"   # Local file
+    destination = "/home/ec2-user" # Remote path
+  }
+
+  provisioner "file" {
+    source      = "./tests"   # Local file
+    destination = "/home/ec2-user" # Remote path
+  }
+
   provisioner "remote-exec" {
     inline = [
       "chmod +x /home/ec2-user/eks_cluster/setup_cluster.sh",
@@ -107,6 +117,7 @@ resource "null_resource" "create_k8s_cluster" {
       "chmod +x /home/ec2-user/helm/deploy_helm.sh",
       "chmod +x /home/ec2-user/helm/upgrade_app.sh",
       "chmod +x /home/ec2-user/k8s/deploy_k8s_manifest.sh",
+      "chmod +x /home/ec2-user/tests/test_deployment.sh",
     ]
   }
 

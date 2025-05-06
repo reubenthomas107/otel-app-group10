@@ -1,0 +1,31 @@
+name: Simulate Upgrades or Failures in Helm - OpenTelemetry Demo App
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_type:
+        description: 'Select simulation type'
+        required: true
+        default: 'upgrade'
+        type: choice
+        options:
+          - upgrade
+          - failure_simulation
+
+jobs:
+  upgrade_helm_otel_app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.2.2
+
+      - name: "Upgrade Helm Chart for OpenTelemetry-Demo App (Remote SSH)"
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.K8S_EC2_SSH_IP }}
+          username: ec2-user
+          key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ec2-user/helm
+            /home/ec2-user/helm/upgrade_app.sh "${{ github.event.inputs.run_type }}"
+            

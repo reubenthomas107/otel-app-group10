@@ -1,0 +1,25 @@
+# {{- define "otel-demo.autoscaling" }}
+# {{- if and (hasKey . "autoscaling") .autoscaling.enabled }}
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: {{ .name }}
+#   namespace: {{ $.Release.Namespace }}
+#   labels:
+#     {{- include "otel-demo.labels" . | nindent 4 }}
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: {{ .name }}
+#   minReplicas: {{ .autoscaling.minReplicas | default 2 }}
+#   maxReplicas: {{ .autoscaling.maxReplicas | default 4 }}
+#   metrics:
+#     - type: Resource
+#       resource:
+#         name: cpu
+#         target:
+#           type: Utilization
+#           averageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage | default 40 }}
+# {{- end }}
+# {{- end }}

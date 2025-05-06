@@ -20,11 +20,60 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 --set serviceAccount.name=aws-load-balancer-controller \
 2>&1 | tee addon_output.log
 
+status=$?
+set -e
+
 if grep -q "cannot re-use a name that is still in use" addon_output.log; then
     echo "ALB Helm chart already installed, continuing..."
+elif [ $status -eq 0 ]; then
+    echo "ALB Helm chart installed successfully"
 else
     echo "Helm install failed with unexpected error"
     exit 1
 fi
 
-# TODO: Install the AWS CloudWatch Container Insights
+
+#Install the AWS CloudWatch Container Insights
+eksctl create iamserviceaccount \
+--name cloudwatch-agent \
+--namespace amazon-cloudwatch \
+--cluster ${CLUSTER_NAME} \
+--region ${CLUSTER_REGION} \
+--role-name aws-cloudwatch-agent \
+--attach-policy-arn arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy \
+--role-only \
+--approve
+
+aws eks create-addon \
+--addon-name amazon-cloudwatch-observability \
+--cluster-name ${CLUSTER_NAME} \
+--region ${CLUSTER_REGION} \
+--service-account-role-arn arn:aws:iam::619715105204:role/aws-cloudwatch-agent \
+2>&1 | tee addon_output.log
+
+status=$?
+set -e
+
+if grep -q "already exists." addon_output.log; then
+    echo "Add-on already installed, continuing..."
+elif [ $status -eq 0 ]; then
+    echo "CloudWatch Container Insights installed successfully"
+else
+    echo "Failed to install CloudWatch Container Insights"
+    exit 1
+fi
+
+
+# Install the Cluster Autoscaler
+kubectl apply -f cluster_autoscaler.yaml
+kubectl wait --for=condition=available --timeout=120s deployment/cluster-autoscaler -n kube-system
+
+status=$?
+set -e
+
+if [ $status -eq 0 ]; then
+    echo "Cluster Autoscaler installed successfully"
+else
+    echo "Failed to install Cluster Autoscaler"
+    exit 1
+fi

@@ -5,6 +5,12 @@
 
 components:
   frontend-proxy:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 4
+      targetCPUUtilizationPercentage: 30
+
     ingress:
       enabled: true
       annotations:
@@ -23,3 +29,18 @@ components:
           - path: /
             pathType: Prefix
             port: 8080
+
+  frontend:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 50
+
+prometheus:
+  server:
+    resources:
+      requests:
+        memory: 300Mi
+      limits:
+        memory: 800Mi
