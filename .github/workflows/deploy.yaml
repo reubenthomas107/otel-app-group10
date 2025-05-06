@@ -24,74 +24,74 @@ jobs:
         continue-on-error: false
 
 
-  build_aws:
-    runs-on: ubuntu-latest
-    needs: check-prerequisites
-    outputs:
-      k8s_mgmt_ip: ${{ steps.tf_outputs.outputs.k8s_mgmt_ip }}
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4.2.2
+  # build_aws:
+  #   runs-on: ubuntu-latest
+  #   needs: check-prerequisites
+  #   outputs:
+  #     k8s_mgmt_ip: ${{ steps.tf_outputs.outputs.k8s_mgmt_ip }}
+  #   steps:
+  #     - name: "Checkout"
+  #       uses: actions/checkout@v4.2.2
 
-      - name: "Set up AWS CLI"
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
+  #     - name: "Set up AWS CLI"
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ vars.AWS_REGION }}
 
-      - name: "Set up Terraform"
-        uses: hashicorp/setup-terraform@v2.0.3
-        with:
-          terraform_version: 1.11.2
-          terraform_wrapper: false
+  #     - name: "Set up Terraform"
+  #       uses: hashicorp/setup-terraform@v2.0.3
+  #       with:
+  #         terraform_version: 1.11.2
+  #         terraform_wrapper: false
 
-      - name: "Check Prerequisite Commands"
-        run: |
-          aws sts get-caller-identity
-          terraform --version
-        continue-on-error: false
+  #     - name: "Check Prerequisite Commands"
+  #       run: |
+  #         aws sts get-caller-identity
+  #         terraform --version
+  #       continue-on-error: false
 
-      - name: "Initialize Terraform and Create Deployment Plan"
-        run: |
-          terraform init
-          terraform validate
-          terraform plan -out=otel.plan -var="ssh_private_key=${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}"
+  #     - name: "Initialize Terraform and Create Deployment Plan"
+  #       run: |
+  #         terraform init
+  #         terraform validate
+  #         terraform plan -out=otel.plan -var="ssh_private_key=${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}"
 
-      - name: "Apply Terraform Plan"
-        run: |
-          terraform apply -var="ssh_private_key=${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}" -auto-approve otel.plan
-        continue-on-error: false
+  #     - name: "Apply Terraform Plan"
+  #       run: |
+  #         terraform apply -var="ssh_private_key=${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}" -auto-approve otel.plan
+  #       continue-on-error: false
 
-      - name: "Save Terraform Outputs"
-        id: tf_outputs
-        run: |
-          echo "k8s_mgmt_ip=$(terraform output -json | jq -r .k8s_management_instance_public_ip.value)" >> $GITHUB_OUTPUT
+  #     - name: "Save Terraform Outputs"
+  #       id: tf_outputs
+  #       run: |
+  #         echo "k8s_mgmt_ip=$(terraform output -json | jq -r .k8s_management_instance_public_ip.value)" >> $GITHUB_OUTPUT
 
-      - name: "Output Variables"
-        run: |
-          echo "k8s_ec2_instance_ip: ${{ steps.tf_outputs.outputs.k8s_mgmt_ip }}"
+  #     - name: "Output Variables"
+  #       run: |
+  #         echo "k8s_ec2_instance_ip: ${{ steps.tf_outputs.outputs.k8s_mgmt_ip }}"
 
 
-  build_eks_cluster:
-    runs-on: ubuntu-latest
-    needs: build_aws
-    env:
-      k8s_mgmt_ip: ${{ needs.build_aws.outputs.k8s_mgmt_ip }}
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4.2.2
+  # build_eks_cluster:
+  #   runs-on: ubuntu-latest
+  #   needs: build_aws
+  #   env:
+  #     k8s_mgmt_ip: ${{ needs.build_aws.outputs.k8s_mgmt_ip }}
+  #   steps:
+  #     - name: "Checkout"
+  #       uses: actions/checkout@v4.2.2
 
-      - name: "Deploy EKS Cluster and Setup Add-ons (Remote SSH)"
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ env.k8s_mgmt_ip }}
-          username: ec2-user
-          key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
-          script: |
-            cd /home/ec2-user/eks_cluster
-            /home/ec2-user/eks_cluster/setup_cluster.sh
-            /home/ec2-user/eks_cluster/setup_addons.sh
+  #     - name: "Deploy EKS Cluster and Setup Add-ons (Remote SSH)"
+  #       uses: appleboy/ssh-action@v1.0.3
+  #       with:
+  #         host: ${{ env.k8s_mgmt_ip }}
+  #         username: ec2-user
+  #         key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
+  #         script: |
+  #           cd /home/ec2-user/eks_cluster
+  #           /home/ec2-user/eks_cluster/setup_cluster.sh
+  #           /home/ec2-user/eks_cluster/setup_addons.sh
 
 
   build_containers:
@@ -132,6 +132,7 @@ jobs:
             echo "Exporting the Ingress ALB Name"
             INGRESS_ALB_NAME=$(kubectl get ingress -n helm-otel-demo -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}' | cut -d '-' -f 1-4)
             echo "$INGRESS_ALB_NAME" > /tmp/ingress_alb_name.txt
+            cat /tmp/ingress_alb_name.txt
 
       - name: "Fetch Ingress ALB Name"
         uses: appleboy/scp-action@v0.1.0
