@@ -193,7 +193,7 @@ jobs:
       - name: "Wait for Application to be Ready"
         run: |
           echo "Waiting for the application load balancers to be deployed completely..."
-          sleep 160
+          sleep 120
 
       - name: "Run Tests on Deployed Otel-demo Application (Remote SSH)"
         uses: appleboy/ssh-action@v1.0.3
@@ -203,4 +203,4 @@ jobs:
           key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
           script: |
             cd /home/ec2-user/tests
-            /home/ec2-user/k8s/test_deployment.sh
+            /home/ec2-user/tests/test_deployment.sh
