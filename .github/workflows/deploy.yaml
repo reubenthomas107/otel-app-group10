@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'deploy/**'
-      - 'feat/k8s'
+      - 'feat/k8s-updates'
       - main
 
 env:
@@ -118,6 +118,7 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: "Deploy Helm Chart for OpenTelemetry-Demo App (Remote SSH)"
+        id: deploy_oteldemo_helm
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.k8s_mgmt_ip }}
@@ -127,7 +128,13 @@ jobs:
             cd /home/ec2-user/helm
             /home/ec2-user/helm/deploy_helm.sh
             echo "Deployed Helm Chart Successfully"
+            
+            echo "Exporting the Ingress ALB Name"
+            echo "export INGRESS_ALB_NAME=\$(kubectl get ingress -n helm-otel-demo -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}' | cut -d '-' -f 1-4')" >> $GITHUB_OUTPUT
 
+      - name: "Output Variables"
+        run: |
+          echo "ingress_alb_name: ${{ steps.deploy_oteldemo_helm.outputs.INGRESS_ALB_NAME }}"
 
   deploy_k8s_manifests:
     runs-on: ubuntu-latest
@@ -158,6 +165,11 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4.2.2
+
+      - name: "Wait for Application to be Ready"
+        run: |
+          echo "Waiting for the application load balancers to be deployed completely..."
+          sleep 160
 
       - name: "Run Tests on Deployed Otel-demo Application (Remote SSH)"
         uses: appleboy/ssh-action@v1.0.3

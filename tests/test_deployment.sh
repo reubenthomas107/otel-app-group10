@@ -3,7 +3,7 @@
 set -euo pipefail
 
 NAMESPACE="helm-otel-demo"
-FRONTEND_URL="https://ecapp-group10.velixor.me"
+FRONTEND_URL="https://otel-demo-group10.velixor.me"
 
 echo "Checking for unhealthy pods in namespace '$NAMESPACE'..."
 UNHEALTHY_PODS=()

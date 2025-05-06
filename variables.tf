@@ -19,3 +19,8 @@ variable "account_id" {
   description = "AWS Account ID"
   default     = "619715105204"
 }
+
+variable "otel_app_alb_name" {
+  description = "Name of the Application Load Balancer"
+  default     = ""
+}

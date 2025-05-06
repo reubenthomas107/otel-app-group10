@@ -14,7 +14,7 @@ components:
     ingress:
       enabled: true
       annotations:
-        alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:619715105204:certificate/318876e0-86dc-4a5c-8657-8df43d2485a7
+        alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:619715105204:certificate/96f757d9-49f0-4e7e-afae-0ce032b4a6db
         alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         kubernetes.io/ingress.class: "alb"
