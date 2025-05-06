@@ -130,12 +130,11 @@ jobs:
             echo "Deployed Helm Chart Successfully"
             
             echo "Exporting the Ingress ALB Name"
-            kubectl get ingress -n helm-otel-demo -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}' | cut -d '-' -f 1-4
-        output: stdout
+            INGRESS_ALB_NAME=$(kubectl get ingress -n helm-otel-demo -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}' | cut -d '-' -f 1-4)
+            echo "INGRESS_ALB_NAME=$INGRESS_ALB_NAME" >> $GITHUB_OUTPUT
 
-      - name: "Output Variables"
+      - name: "ALB Name: Output"
         run: |
-          echo "INGRESS_ALB_NAME=${{ steps.deploy_oteldemo_helm.stdout }}" >> $GITHUB_OUTPUT
           echo "ALB NAME: ${{ steps.deploy_oteldemo_helm.outputs.INGRESS_ALB_NAME }}"
 
 
