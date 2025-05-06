@@ -131,11 +131,24 @@ jobs:
             
             echo "Exporting the Ingress ALB Name"
             INGRESS_ALB_NAME=$(kubectl get ingress -n helm-otel-demo -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}' | cut -d '-' -f 1-4)
-            echo "INGRESS_ALB_NAME=$INGRESS_ALB_NAME" >> $GITHUB_OUTPUT
+            echo "$INGRESS_ALB_NAME" > /tmp/ingress_alb_name.txt
+
+      - name: "Fetch Ingress ALB Name"
+        uses: appleboy/scp-action@v0.1.0
+        with:
+          host: ${{ env.k8s_mgmt_ip }}
+          username: ec2-user
+          key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
+          source: /tmp/ingress_alb_name.txt
+          target: ./ingress_alb_name.txt
+
 
       - name: "ALB Name: Output"
+        id: alb_variable
         run: |
-          echo "ALB NAME: ${{ steps.deploy_oteldemo_helm.outputs.INGRESS_ALB_NAME }}"
+          INGRESS_ALB_NAME=$(cat ./ingress_alb_name.txt)
+          echo "INGRESS_ALB_NAME=$INGRESS_ALB_NAME" >> $GITHUB_OUTPUT
+          echo "ALB NAME: ${{ steps.alb_variable.outputs.INGRESS_ALB_NAME }}"
 
 
   deploy_k8s_manifests:
