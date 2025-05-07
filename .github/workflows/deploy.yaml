@@ -205,3 +205,17 @@ jobs:
           script: |
             cd /home/ec2-user/tests
             /home/ec2-user/tests/test_deployment.sh
+            STATUS=$?
+            if [ $STATUS -ne 0 ]; then
+              REVISION_COUNT=$(helm history helm-otel-demo -n helm-otel-demo --output json | jq length)
+              echo "Revision count: $REVISION_COUNT"
+              if [ "$REVISION_COUNT" -gt 1 ]; then
+                echo "Rolling back $RELEASE_NAME..."
+                helm rollback helm-otel-demo -n helm-otel-demo
+              else
+                echo "Cannot rollback: only one or no revision exists. Check the deployment."
+              fi
+              exit 1
+            else
+              echo "Tests passed successfully."
+            fi
