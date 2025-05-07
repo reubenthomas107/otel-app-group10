@@ -24,3 +24,8 @@ variable "otel_app_alb_name" {
   description = "Name of the Application Load Balancer"
   default     = ""
 }
+
+variable "sns_email" {
+  description = "Email address for SNS notifications"
+  default     = "reuben10@umd.edu"
+}
