@@ -78,27 +78,27 @@ resource "aws_wafv2_web_acl" "otel_app_waf" {
   }
 
   # Rule 4: AWS Managed Bot Control which protects application against bots
-  rule {
-    name     = "AWSManagedRulesBotControlRuleSet"
-    priority = 3
+  # rule {
+  #   name     = "AWSManagedRulesBotControlRuleSet"
+  #   priority = 3
 
-    override_action {
-      none {}
-    }
+  #   override_action {
+  #     none {}
+  #   }
 
-    statement {
-      managed_rule_group_statement {
-        name        = "AWSManagedRulesBotControlRuleSet"
-        vendor_name = "AWS"
-      }
-    }
+  #   statement {
+  #     managed_rule_group_statement {
+  #       name        = "AWSManagedRulesBotControlRuleSet"
+  #       vendor_name = "AWS"
+  #     }
+  #   }
 
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "AWSManagedRulesBotControlMetric"
-      sampled_requests_enabled   = true
-    }
-  }
+  #   visibility_config {
+  #     cloudwatch_metrics_enabled = true
+  #     metric_name                = "AWSManagedRulesBotControlMetric"
+  #     sampled_requests_enabled   = true
+  #   }
+  # }
 
   visibility_config {
     cloudwatch_metrics_enabled = true
@@ -110,12 +110,6 @@ resource "aws_wafv2_web_acl" "otel_app_waf" {
     Name    = "otelapp-group10-waf"
     project = "final"
   }
-}
-
-# Associating WAF Web ACL with the Application Load Balancer
-resource "aws_wafv2_web_acl_association" "otel_app_waf_association" {
-  resource_arn = data.aws_lb.otelapp_alb.arn
-  web_acl_arn  = aws_wafv2_web_acl.otel_app_waf.arn
 }
 
 # AWS Shield Standard is automatically enabled for all AWS resources (no configuration needed).

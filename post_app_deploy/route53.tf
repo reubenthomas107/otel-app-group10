@@ -39,18 +39,9 @@ resource "aws_route53_record" "app_record" {
   }
 }
 
-# data "aws_load_balancer" "otelapp_alb" {
-#   name = "ecapp-alb"
-# }
-
-# resource "aws_route53_record" "app_record" {
-#   zone_id = data.aws_route53_zone.ecapp_hosted_zone.zone_id
-#   name    = "ecapp-group10.velixor.me"
-#   type    = "A"
-
-#   alias {
-#     name                   = aws_lb.ecapp_alb.dns_name
-#     zone_id                = aws_lb.ecapp_alb.zone_id
-#     evaluate_target_health = true
-#   }
-# }
+# Associating WAF Web ACL with the Application Load Balancer
+resource "aws_wafv2_web_acl_association" "otel_app_waf_association" {
+  resource_arn = data.aws_lb.otelapp_alb.arn
+  web_acl_arn  = aws_wafv2_web_acl.otel_app_waf.arn
+  depends_on = [ aws_route53_record.app_record ]
+}

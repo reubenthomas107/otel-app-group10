@@ -6,6 +6,7 @@ on:
       - 'deploy/**'
       - 'feat/k8s-updates'
       - main
+      - waf_from_main_branch
 
 env:
   AWS_REGION: ${{ vars.AWS_REGION }}
@@ -212,6 +213,7 @@ jobs:
               if [ "$REVISION_COUNT" -gt 1 ]; then
                 echo "Rolling back $RELEASE_NAME..."
                 helm rollback helm-otel-demo -n helm-otel-demo
+                /home/ec2-user/tests/test_deployment.sh
               else
                 echo "Cannot rollback: only one or no revision exists. Check the deployment."
               fi
