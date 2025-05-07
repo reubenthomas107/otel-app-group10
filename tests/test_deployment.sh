@@ -3,13 +3,18 @@
 set -euo pipefail
 
 NAMESPACE="helm-otel-demo"
-FRONTEND_URL="https://ecapp-group10.velixor.me"
+FRONTEND_URL="https://otel-demo-group10.velixor.me"
 
 echo "Checking for unhealthy pods in namespace '$NAMESPACE'..."
 UNHEALTHY_PODS=()
 
 # Iterate through all pods and inspect container statuses
 for pod in $(kubectl get pods -n "$NAMESPACE" -o jsonpath='{.items[*].metadata.name}'); do
+  if ! kubectl get pod "$pod" -n "$NAMESPACE" &>/dev/null; then
+    echo "Pod '$pod' no longer exists. Skipping..."
+    continue
+  fi
+  
   bad_state=$(kubectl get pod "$pod" -n "$NAMESPACE" -o json | jq -r '
     .status.containerStatuses[]? | select(
       .state.waiting.reason == "CrashLoopBackOff" or

@@ -65,7 +65,7 @@ fi
 
 
 # Install the Cluster Autoscaler
-kubectl apply -f cluster_autoscaler.yaml
+kubectl apply -f /home/ec2-user/eks_cluster/cluster_autoscaler.yaml
 kubectl wait --for=condition=available --timeout=120s deployment/cluster-autoscaler -n kube-system
 
 status=$?
