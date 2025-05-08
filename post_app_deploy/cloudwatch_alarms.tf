@@ -66,7 +66,7 @@ resource "aws_cloudwatch_metric_alarm" "namespace_pod_restarts" {
   evaluation_periods  = 1
   
   metric_query {
-    id          = "m1"
+    id          = "q1"
     label       = "pod-restarts-helm-otel-demo-namespace"
     expression = "SELECT SUM(pod_number_of_container_restarts) FROM SCHEMA(ContainerInsights, ClusterName,Namespace,PodName) WHERE ClusterName = 'otel-app-cluster' AND Namespace = 'helm-otel-demo'"
     return_data = true
