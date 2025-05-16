@@ -6,7 +6,7 @@ resource "aws_iam_instance_profile" "ec2_k8s_profile" {
 
 resource "aws_instance" "my_k8s_mgmt_instance" {
   ami                         = "ami-07a6f770277670015"
-  instance_type               = "t3.medium"
+  instance_type               = "t3.small"
   key_name                    = "final_keypair"
   subnet_id                   = aws_subnet.public_subnet_1.id
   associate_public_ip_address = true
@@ -56,7 +56,6 @@ resource "aws_instance" "my_k8s_mgmt_instance" {
     volume_size = 16
     volume_type = "gp3"
   }
-  # TODO: Consider using EFS Storage
 
   lifecycle {
     ignore_changes = [

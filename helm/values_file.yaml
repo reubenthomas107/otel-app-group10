@@ -1,15 +1,10 @@
-# components:
-#   frontend-proxy:
-#     service:
-#       type: LoadBalancer
-
 components:
   frontend-proxy:
     autoscaling:
       enabled: true
       minReplicas: 2
       maxReplicas: 4
-      targetCPUUtilizationPercentage: 30
+      targetUtilizationPercentage: 30
 
     ingress:
       enabled: true
@@ -36,7 +31,7 @@ components:
       enabled: true
       minReplicas: 2
       maxReplicas: 3
-      targetCPUUtilizationPercentage: 50
+      targetUtilizationPercentage: 50
 
 prometheus:
   server:
