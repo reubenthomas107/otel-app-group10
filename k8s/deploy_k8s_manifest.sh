@@ -8,6 +8,6 @@ K8S_NAMESPACE="otel-demo"
 
 kubectl create --namespace $K8S_NAMESPACE -f manifests/opentelemetry-demo.yaml
 kubectl create --namespace $K8S_NAMESPACE -f manifests/ingress.yaml
-kubectl create --namespace $K8S_NAMESPACE -f manifests/frontend-proxy-hpa.yaml
+kubectl create --namespace $K8S_NAMESPACE -f manifests/hpa.yaml
 
 kubectl wait --for=condition=Ready pods --all -n $K8S_NAMESPACE --timeout=180s

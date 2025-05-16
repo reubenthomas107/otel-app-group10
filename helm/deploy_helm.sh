@@ -28,8 +28,6 @@ helm upgrade --install $NAMESPACE ../opentelemetry-helm-charts/charts/openteleme
 # Wait for the pods to be in a running state
 kubectl wait --for=condition=Ready pods --all -n $NAMESPACE --timeout=180s
 
-#kubectl wait --for=condition=available --timeout=120s deployment/otel-app -n $NAMESPACE
-
 # Check if the pods are running
 if kubectl get pods -n $NAMESPACE | grep -q "Running"; then
   echo "All pods are running."

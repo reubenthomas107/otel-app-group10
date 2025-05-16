@@ -321,6 +321,6 @@ spec:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage | default 80 }}
+          averageUtilization: {{ .autoscaling.targetUtilizationPercentage | default 80 }}
 {{- end }}
 {{- end }}

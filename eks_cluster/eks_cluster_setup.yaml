@@ -5,8 +5,6 @@ metadata:
   name: otel-app-cluster
   region: us-east-1
 
-# availabilityZones: ["us-east-1a", "us-east-1b"]
-
 managedNodeGroups:
   - name: eks-otel-app-mng
     instanceType: t3.large
@@ -30,5 +28,5 @@ iam:
 cloudWatch:
  clusterLogging:
    enableTypes: ["*"]
-   logRetentionInDays: 1 #7
+   logRetentionInDays: 7
 

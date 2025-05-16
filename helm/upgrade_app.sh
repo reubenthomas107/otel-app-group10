@@ -11,8 +11,8 @@ if [[ "$1" == "upgrade" ]]; then
     # Updating the replica count for the frontend-proxy
 
     helm upgrade --install $NAMESPACE ../opentelemetry-helm-charts/charts/opentelemetry-demo --namespace $NAMESPACE \
-    --set components.frontend-proxy.replicas=4 \
-    --set components.frontend.replicas=4 \
+    --set components.checkout.replicas=4 \
+    --set components.cart.replicas=4 \
     --values values_file.yaml \
     --wait --timeout 3m
 
@@ -21,12 +21,10 @@ else
     echo "Running failure simulation..."
     helm upgrade --install $NAMESPACE ../opentelemetry-helm-charts/charts/opentelemetry-demo --namespace $NAMESPACE \
     --set components.frontend-proxy.imageOverride.tag=3.0.2 \
-    --set components.frontend.replicas=2 \
     --values values_file.yaml \
     --wait --timeout 30s
 
     kubectl wait --for=condition=Ready pods --all -n $NAMESPACE --timeout=30s
-    #TODO: Write failure simulation code here - maybe, image pull error
 fi
 
 
@@ -35,7 +33,6 @@ fi
 # Check the update history
 echo "Update history for the release:"
 helm history $NAMESPACE -n $NAMESPACE
-
 
 # Check if the deployment was successful (Run test cases to verify successful deployment)
 bash /home/ec2-user/tests/test_deployment.sh
@@ -47,7 +44,6 @@ else
     echo "Deployment test cases failed, rolling back to the previous stable Helm version...."
     # Rolling back to the previous stable version
     helm rollback $NAMESPACE $(helm history $NAMESPACE -n $NAMESPACE --output json | jq '.[-2].revision') -n $NAMESPACE
-    #helm rollback $NAMESPACE 1 -n $NAMESPACE
     echo "Rolled back to the previous stable version."
 
     # Validate Rollback
