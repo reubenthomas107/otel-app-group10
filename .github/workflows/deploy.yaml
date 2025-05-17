@@ -106,6 +106,26 @@ jobs:
         run: | 
           echo "This step is for building and pushing container images to ECR Registry"
 
+      - name: "Build and Push Container Images to ECR Registry via SSH"
+        id: build_container_images 
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.k8s_mgmt_ip }}
+          username: ec2-user
+          key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
+          script: |
+            echo "This step is for building and pushing container images to ECR Registry"
+            cd /home/ec2-user
+            git clone https://github.com/open-telemetry/opentelemetry-demo.git
+            
+            chmod +x /home/ec2-user/k8s/build_images.sh
+            cp /home/ec2-user/k8s/build_images.sh /home/ec2-user/opentelemetry-demo/
+
+            /home/ec2-user/opentelemetry-demo/build_images.sh
+            
+            echo "Images Pushed to AWS ECR Registry Successfully"
+        continue-on-error: false
+
 
   deploy_oteldemo_helm:
     runs-on: ubuntu-latest
