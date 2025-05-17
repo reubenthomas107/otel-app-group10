@@ -11343,7 +11343,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: accounting
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-accounting'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/accounting:latest'
           imagePullPolicy: IfNotPresent
           env:
             - name: OTEL_SERVICE_NAME
@@ -11406,7 +11406,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: ad
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-ad'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/ad:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -11472,7 +11472,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: cart
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-cart'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/cart:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -11548,7 +11548,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: checkout
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-checkout'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/checkout:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -11633,7 +11633,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: currency
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-currency'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/currency:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -11695,7 +11695,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: email
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-email'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/email:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -11797,7 +11797,7 @@ spec:
             - name: config-rw
               mountPath: /etc/flagd
         - name: flagd-ui
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-flagd-ui'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/flagd-ui:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -11876,7 +11876,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: fraud-detection
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-fraud-detection'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/fraud-detection:latest'
           imagePullPolicy: IfNotPresent
           env:
             - name: OTEL_SERVICE_NAME
@@ -11943,7 +11943,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: frontend
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-frontend'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/frontend:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -12033,7 +12033,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: frontend-proxy
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-frontend-proxy'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/frontend-proxy:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -12129,7 +12129,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: image-provider
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-image-provider'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/image-provider:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -12191,7 +12191,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: kafka
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-kafka'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/kafka:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -12259,7 +12259,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: load-generator
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-load-generator'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/load-generator:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -12339,7 +12339,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: payment
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-payment'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/payment:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -12407,7 +12407,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: product-catalog
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-product-catalog'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/product-catalog:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -12478,7 +12478,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: quote
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-quote'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/quote:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -12544,7 +12544,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: recommendation
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-recommendation'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/recommendation:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -12614,7 +12614,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: shipping
-          image: 'ghcr.io/open-telemetry/demo:2.0.2-shipping'
+          image: '619715105204.dkr.ecr.us-east-1.amazonaws.com/opentelemetry-demo/shipping:latest'
           imagePullPolicy: IfNotPresent
           ports:
             
