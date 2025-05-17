@@ -113,8 +113,8 @@ jobs:
           host: ${{ env.k8s_mgmt_ip }}
           username: ec2-user
           key: ${{ secrets.K8S_EC2_SSH_PRIVATE_KEY }}
-          command_timeout: 3000
-          timeout: 3000
+          command_timeout: 50m
+          timeout: 3000s
           script: |
             echo "This step is for building and pushing container images to ECR Registry"
             cd /home/ec2-user
