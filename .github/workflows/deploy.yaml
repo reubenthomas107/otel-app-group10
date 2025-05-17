@@ -121,6 +121,7 @@ jobs:
             chmod +x /home/ec2-user/k8s/build_images.sh
             cp /home/ec2-user/k8s/build_images.sh /home/ec2-user/opentelemetry-demo/
 
+            cd /home/ec2-user/opentelemetry-demo
             /home/ec2-user/opentelemetry-demo/build_images.sh
             
             echo "Images Pushed to AWS ECR Registry Successfully"
