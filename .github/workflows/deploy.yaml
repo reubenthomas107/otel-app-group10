@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - 'deploy/**'
-      - 'feat/k8s-updates'
       - main
-      - waf_from_main_branch
 
 env:
   AWS_REGION: ${{ vars.AWS_REGION }}
